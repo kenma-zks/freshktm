@@ -1,63 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ICharacterData } from "@/types/Types";
 import CharacterCard from "./CharacterCard";
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Link } from "react-router-dom";
 import { setSelectedCharacter } from "@/store/characterSlice";
+import { useQuery } from "react-query";
+import { getCharacters } from "@/api/api";
+import Loading from "./ui/Loading";
 
 const CharacterList = () => {
   const itemsPerPage = 20;
 
-  const [characters, setCharacters] = useState<ICharacterData[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalResults, setTotalResults] = useState(0);
 
   const searchQuery = useAppSelector((state) => state.search);
+
+  const dispatch = useAppDispatch();
+
+  const { data, error, isLoading } = useQuery(
+    ["characters", currentPage],
+    () => getCharacters(currentPage, itemsPerPage),
+    {
+      enabled: currentPage > 0,
+    }
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <div>Something went wrong</div>;
+  }
+
+  const characters = data?.data?.results as ICharacterData[];
+  const totalPages = Math.ceil(data?.data?.total / itemsPerPage) || 0;
+  const totalResults = data?.data?.total || 0;
 
   const filteredCharacters = characters?.filter((character) =>
     character.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const dispatch = useAppDispatch();
-
-  const fetchCharacter = async (page: number) => {
-    try {
-      const offset = (page - 1) * itemsPerPage;
-
-      const response = await fetch(
-        `http://gateway.marvel.com/v1/public/characters?apikey=762b368e819bdc2839a3c34108d6375f&hash=4e5d5653785a55a37e97032fa1b98745&ts=1696329009&limit=${itemsPerPage}&offset=${offset}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const data = await response.json();
-
-      const characterData: ICharacterData[] = data.data.results.map(
-        (result: ICharacterData) => ({
-          id: result.id,
-          name: result.name,
-          description: result.description,
-          thumbnail: result.thumbnail,
-          comics: result.comics,
-          series: result.series,
-        })
-      );
-
-      setCharacters(characterData);
-      setTotalPages(Math.ceil(data.data.total / itemsPerPage));
-      setTotalResults(data.data.total);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCharacter(currentPage);
-  }, [currentPage]);
+  console.log(filteredCharacters);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {

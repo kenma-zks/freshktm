@@ -1,74 +1,39 @@
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import { IComicData, ISeriesData } from "@/types/Types";
-import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
+import { useQuery } from "react-query";
+import { getComics, getSeries } from "@/api/api";
+import Loading from "@/components/ui/Loading";
 
 const Characters = () => {
-  const { characterId } = useParams<{ characterId: string }>();
-
   const selectedCharacter = useSelector(
     (state: RootState) => state.characters.selectedCharacter
   );
-  const [comicData, setComicData] = useState<IComicData[] | null>(null);
-  const [seriesData, setSeriesData] = useState<ISeriesData[] | null>(null);
 
-  const fetchComicDetails = async () => {
-    try {
-      const response = await fetch(
-        `${selectedCharacter?.comics.collectionURI}?apikey=762b368e819bdc2839a3c34108d6375f&hash=4e5d5653785a55a37e97032fa1b98745&ts=1696329009`
-      );
+  const {
+    data: comicData,
+    error: comicError,
+    isLoading: comicLoading,
+  } = useQuery(["comicData", selectedCharacter?.id], () =>
+    getComics(selectedCharacter?.comics?.collectionURI || "")
+  );
 
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
+  const {
+    data: seriesData,
+    error: seriesError,
+    isLoading: seriesLoading,
+  } = useQuery(["seriesData", selectedCharacter?.id], () =>
+    getSeries(selectedCharacter?.series?.collectionURI || "")
+  );
 
-      const data = await response.json();
+  if (comicLoading || seriesLoading) {
+    return <Loading />;
+  }
 
-      const comicData = data.data.results.map((result: IComicData) => ({
-        id: result.id,
-        title: result.title,
-        thumbnail: result.thumbnail,
-      }));
-      console.log(comicData);
-      setComicData(comicData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchSeriesDetails = async () => {
-    try {
-      const response = await fetch(
-        `${selectedCharacter?.series.collectionURI}?apikey=762b368e819bdc2839a3c34108d6375f&hash=4e5d5653785a55a37e97032fa1b98745&ts=1696329009`
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const data = await response.json();
-
-      const seriesData = data.data.results.map((result: ISeriesData) => ({
-        id: result.id,
-        title: result.title,
-        thumbnail: result.thumbnail,
-      }));
-      console.log(seriesData);
-      setSeriesData(seriesData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchComicDetails();
-  }, [characterId]);
-
-  useEffect(() => {
-    fetchSeriesDetails();
-  }, [characterId]);
+  if (comicError || seriesError) {
+    return <div>Something went wrong</div>;
+  }
 
   return (
     <div className="w-full h-screen ">
@@ -96,23 +61,24 @@ const Characters = () => {
           <div className="border-b border-black">
             <p className="text-lg  font-bold ">Comics Appeared In</p>
           </div>
-          <div className="grid grid-cols-3 gap-4  gap-x-4 py-[12px] justify-between">
-            {comicData?.map(
-              (comic) =>
-                (
-                  <div key={comic.id}>
-                    <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
-                      <img
-                        src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                        alt={comic.title}
-                        className=" max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
-                      />
-                    </div>
-                    <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px]">
-                      {comic.title}
-                    </p>
+          <div className="grid grid-cols-3 gap-4 gap-x-4 py-[12px] justify-between">
+            {comicData?.length > 0 ? (
+              comicData.map((comic: IComicData) => (
+                <div key={comic.id}>
+                  <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
+                    <img
+                      src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                      alt={comic.title}
+                      className="max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
+                    />
                   </div>
-                ) || "No comics available"
+                  <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px]">
+                    {comic.title}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No comics available</p>
             )}
           </div>
         </div>
@@ -120,23 +86,24 @@ const Characters = () => {
           <div className="border-b border-black">
             <p className="text-lg  font-bold ">Series Appeared In</p>
           </div>
-          <div className="grid grid-cols-3 gap-4  gap-x-4 py-[12px] justify-between">
-            {seriesData?.map(
-              (series) =>
-                (
-                  <div key={series.id}>
-                    <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
-                      <img
-                        src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
-                        alt={series.title}
-                        className=" max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
-                      />
-                    </div>
-                    <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px] ">
-                      {series.title}
-                    </p>
+          <div className="grid grid-cols-3 gap-4 gap-x-4 py-[12px] justify-between">
+            {seriesData?.length > 0 ? (
+              seriesData.map((series: ISeriesData) => (
+                <div key={series.id}>
+                  <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
+                    <img
+                      src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+                      alt={series.title}
+                      className="max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
+                    />
                   </div>
-                ) || "No series available"
+                  <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px]">
+                    {series.title}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No series available</p>
             )}
           </div>
         </div>

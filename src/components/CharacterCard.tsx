@@ -24,7 +24,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
           </h2>
         </div>
         <div className="relative flex flex-col w-full h-full z-10">
-          <p className="line-clamp-3 font-semibold text-xs text-[#a09e9e] text-justify">
+          <p className="line-clamp-3 font-semibold text-xs text-[#bdbaba] text-justify ">
             {character.description}
           </p>
         </div>
