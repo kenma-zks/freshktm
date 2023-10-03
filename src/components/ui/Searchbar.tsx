@@ -1,8 +1,20 @@
 import { FiSearch } from "react-icons/fi";
+import { useState } from "react";
 
-const Searchbar = () => {
+const Searchbar = ({
+  onSubmit,
+}: {
+  onSubmit: (searchTerm: string) => void;
+}) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    onSubmit(searchTerm);
+  };
+
   return (
-    <div className="flex flex-col w-full h-[100px] px-[24px] ">
+    <div className="flex flex-col w-full px-[24px] ">
       <div className="flex flex-row h-full items-end justify-between border-b border-gray-200">
         <div className="flex items-center justify-start border-b border-black w-[400px] relative ">
           <FiSearch className="absolute w-5 h-5  " />
@@ -12,6 +24,8 @@ const Searchbar = () => {
               letterSpacing: "0.5px",
             }}
             placeholder="SEARCH..."
+            value={searchTerm}
+            onChange={handleInputChange}
           />
         </div>
       </div>

@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { ICharacterData } from "@/types/Types";
 import CharacterCard from "./CharacterCard";
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { Link } from "react-router-dom";
+import { setSelectedCharacter } from "@/store/characterSlice";
 
 const CharacterList = () => {
   const itemsPerPage = 20;
@@ -11,12 +14,20 @@ const CharacterList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
 
+  const searchQuery = useAppSelector((state) => state.search);
+
+  const filteredCharacters = characters?.filter((character) =>
+    character.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const dispatch = useAppDispatch();
+
   const fetchCharacter = async (page: number) => {
     try {
       const offset = (page - 1) * itemsPerPage;
 
       const response = await fetch(
-        `https://gateway.marvel.com:443/v1/public/characters?apikey=59596135a1e26a7ad544548aea32b3d6&hash=31cb30cf91afbb0fff532869c67e5174&ts=1696168450&limit=${itemsPerPage}&offset=${offset}`
+        `http://gateway.marvel.com/v1/public/characters?apikey=762b368e819bdc2839a3c34108d6375f&hash=4e5d5653785a55a37e97032fa1b98745&ts=1696329009&limit=${itemsPerPage}&offset=${offset}`
       );
 
       if (!response.ok) {
@@ -31,6 +42,8 @@ const CharacterList = () => {
           name: result.name,
           description: result.description,
           thumbnail: result.thumbnail,
+          comics: result.comics,
+          series: result.series,
         })
       );
 
@@ -143,14 +156,26 @@ const CharacterList = () => {
   return (
     <div className="flex flex-col w-full h-full px-[24px] py-[12px] ">
       <div className="flex flex-row h-auto items-center justify-between ">
-        <p className="font-semibold text-gray-500 text-sm">
+        <p
+          className="font-semibold text-gray-500 text-xs"
+          style={{
+            letterSpacing: "1px",
+          }}
+        >
           {totalResults} RESULTS
         </p>
-        <p className="font-semibold text-gray-500 text-sm"> SORT BY</p>
       </div>
       <div className="grid grid-cols-5 gap-4 gap-x-4 py-[12px]">
-        {characters?.map((character: ICharacterData) => (
-          <CharacterCard key={character.id} character={character} />
+        {filteredCharacters?.map((character: ICharacterData) => (
+          <Link
+            to={`/characters/${character.id}`}
+            key={character.id}
+            onClick={() => {
+              dispatch(setSelectedCharacter(character));
+            }}
+          >
+            <CharacterCard key={character.id} character={character} />
+          </Link>
         ))}
       </div>
       <div className="flex justify-center items-center">
