@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <>
-      <div>
-        <Button variant="outline">Click me</Button>
-      </div>
+      <Dashboard />
     </>
   );
 }
