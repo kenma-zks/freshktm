@@ -91,26 +91,29 @@ const Characters = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-row  w-full border border-black px-12">
+      <div className="flex flex-row  w-full border border-black px-12 bg-[#F3F4F7]">
         <div className="flex flex-col w-1/2 items-center justify-start border-r border-black px-4 py-4 gap-4">
           <div className="border-b border-black">
             <p className="text-lg  font-bold ">Comics Appeared In</p>
           </div>
           <div className="grid grid-cols-3 gap-4  gap-x-4 py-[12px] justify-between">
-            {comicData?.map((comic) => (
-              <div key={comic.id}>
-                <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
-                  <img
-                    src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                    alt={comic.title}
-                    className=" max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
-                  />
-                </div>
-                <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px]">
-                  {comic.title}
-                </p>
-              </div>
-            ))}
+            {comicData?.map(
+              (comic) =>
+                (
+                  <div key={comic.id}>
+                    <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
+                      <img
+                        src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                        alt={comic.title}
+                        className=" max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
+                      />
+                    </div>
+                    <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px]">
+                      {comic.title}
+                    </p>
+                  </div>
+                ) || "No comics available"
+            )}
           </div>
         </div>
         <div className="flex flex-col w-1/2 items-center justify-start border-l border-black px-4 py-4 gap-4">
@@ -118,20 +121,23 @@ const Characters = () => {
             <p className="text-lg  font-bold ">Series Appeared In</p>
           </div>
           <div className="grid grid-cols-3 gap-4  gap-x-4 py-[12px] justify-between">
-            {seriesData?.map((series) => (
-              <div key={series.id}>
-                <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
-                  <img
-                    src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
-                    alt={series.title}
-                    className=" max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
-                  />
-                </div>
-                <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px] ">
-                  {series.title}
-                </p>
-              </div>
-            ))}
+            {seriesData?.map(
+              (series) =>
+                (
+                  <div key={series.id}>
+                    <div className="flex flex-col items-center justify-center max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px]">
+                      <img
+                        src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+                        alt={series.title}
+                        className=" max-w-[200px] max-h-[300px] min-w-[200px] min-h-[300px] object-cover"
+                      />
+                    </div>
+                    <p className="text-xs font-bold mt-2 line-clamp-2 h-[40px] ">
+                      {series.title}
+                    </p>
+                  </div>
+                ) || "No series available"
+            )}
           </div>
         </div>
       </div>
