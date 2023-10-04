@@ -44,7 +44,7 @@ const Chart = () => {
 
   const { data, error, isLoading } = useQuery(
     ["characters", currentPage],
-    () => getCharacters(currentPage, itemsPerPage),
+    () => getCharacters(currentPage, itemsPerPage, ""),
     {
       enabled: currentPage > 0,
     }
@@ -169,6 +169,7 @@ const Chart = () => {
 
   const options = {
     responsive: true,
+
     plugins: {
       legend: {
         position: "top" as const,
@@ -178,6 +179,8 @@ const Chart = () => {
         text: "Characters appearances in comics and series",
       },
     },
+    maintainAspectRation: false,
+    aspectRatio: 1,
   };
 
   const labels = characters?.map((character) => character.name);
@@ -208,7 +211,7 @@ const Chart = () => {
       <div className="flex flex-col w-full h-full px-12 py-6">
         <div className="flex flex-row h-auto items-center justify-end ">
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex flex-row items-center space-x-2 font-semibold text-sm text-gray-600 hover:text-red-600 hover:cursor-pointer">
+            <DropdownMenuTrigger className="flex flex-row items-center space-x-2 font-semibold text-sm text-gray-600 mb-4 hover:text-red-600 hover:cursor-pointer">
               <p>Characters</p>
               <AiFillCaretDown />
             </DropdownMenuTrigger>
@@ -237,8 +240,8 @@ const Chart = () => {
           </DropdownMenu>
         </div>
 
-        <div className="flex flex-col  w-full h-full items-center justify-center border border-black">
-          <Bar options={options} data={filteredChartData} />
+        <div className="flex flex-col w-full min-h-[400px] items-center justify-center ">
+          <Bar options={options} data={filteredChartData} className="" />
         </div>
       </div>
     </div>

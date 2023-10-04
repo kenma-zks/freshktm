@@ -14,9 +14,9 @@ export const getCharacters = async (
 
   const response = await instance.get(url, {
     params: {
-      apikey: "762b368e819bdc2839a3c34108d6375f",
-      hash: "4e5d5653785a55a37e97032fa1b98745",
-      ts: 1696329009,
+      apikey: "59596135a1e26a7ad544548aea32b3d6",
+      hash: "31cb30cf91afbb0fff532869c67e5174",
+      ts: 1696168450,
       offset,
       limit: itemsPerPage,
       ...(query && { nameStartsWith: query }),
@@ -29,9 +29,9 @@ export const getCharacters = async (
 export const getCharacter = async (collectionURI: string) => {
   const response = await instance.get(collectionURI, {
     params: {
-      apikey: "762b368e819bdc2839a3c34108d6375f",
-      hash: "4e5d5653785a55a37e97032fa1b98745",
-      ts: 1696329009,
+      apikey: "59596135a1e26a7ad544548aea32b3d6",
+      hash: "31cb30cf91afbb0fff532869c67e5174",
+      ts: 1696168450,
     },
   });
 
@@ -41,9 +41,9 @@ export const getCharacter = async (collectionURI: string) => {
 export const getComics = async (collectionURI: string) => {
   const response = await instance.get(collectionURI, {
     params: {
-      apikey: "762b368e819bdc2839a3c34108d6375f",
-      hash: "4e5d5653785a55a37e97032fa1b98745",
-      ts: 1696329009,
+      apikey: "59596135a1e26a7ad544548aea32b3d6",
+      hash: "31cb30cf91afbb0fff532869c67e5174",
+      ts: 1696168450,
     },
   });
 
@@ -53,9 +53,9 @@ export const getComics = async (collectionURI: string) => {
 export const getSeries = async (collectionURI: string) => {
   const response = await instance.get(collectionURI, {
     params: {
-      apikey: "762b368e819bdc2839a3c34108d6375f",
-      hash: "4e5d5653785a55a37e97032fa1b98745",
-      ts: 1696329009,
+      apikey: "59596135a1e26a7ad544548aea32b3d6",
+      hash: "31cb30cf91afbb0fff532869c67e5174",
+      ts: 1696168450,
     },
   });
 

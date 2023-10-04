@@ -14,8 +14,8 @@ const Dashboard = () => {
     <div className="flex flex-col w-full h-screen ">
       <Header />
 
-      <div className="flex flex-col px-[120px] gap-4">
-        <div className="flex flex-col w-full px-[24px]">
+      <div className="flex flex-col px-[12px] md:px-[32px] lg:px-[120px] gap-4">
+        <div className="flex flex-col w-full px-[12px] md:px-[12px]">
           <div className="flex flex-row h-full items-center mt-4">
             <p
               className="text-xl font-semibold "

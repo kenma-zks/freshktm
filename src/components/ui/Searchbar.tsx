@@ -18,7 +18,7 @@ const Searchbar = ({
   };
 
   return (
-    <div className="flex flex-col w-full px-[24px] ">
+    <div className="flex flex-col w-full px-[12px] lg:px-[24px] ">
       <div className="flex flex-row h-full items-end justify-between border-b border-gray-200">
         <div className="flex items-center justify-start border-b border-black w-[400px] relative ">
           <FiSearch className="absolute w-5 h-5  " />

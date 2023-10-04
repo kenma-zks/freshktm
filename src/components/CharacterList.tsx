@@ -62,7 +62,7 @@ const CharacterList = () => {
       <button
         key={page}
         onClick={() => handlePageChange(page)}
-        className={`mx-1 px-3 py-1 rounded-full hover:text-red-600 ${
+        className={`mx-1 px-1 md:px-3 py-1 rounded-full hover:text-red-600 text-xs md:text-base ${
           currentPage === page ? "font-semibold text-red-600" : "font-semibold"
         }`}
       >
@@ -117,7 +117,7 @@ const CharacterList = () => {
     return (
       currentPage > 1 && (
         <button
-          className="flex flex-row items-center gap-2 mx-1 px-3 py-1 rounded-full text-sm font-semibold hover:text-red-600"
+          className="flex flex-row items-center gap-1 md:gap-2 mx-1 px-3 py-1 rounded-full text-xs md:text-sm font-semibold hover:text-red-600"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -131,7 +131,7 @@ const CharacterList = () => {
     return (
       <button
         onClick={() => handlePageChange(currentPage + 1)}
-        className="flex flex-row items-center gap-2 mx-1 px-3 py-1 rounded-full text-sm font-semibold hover:text-red-600"
+        className="flex flex-row items-center gap-1 md:gap-2 mx-1 px-3 py-1 rounded-full text-xs md:text-sm font-semibold hover:text-red-600"
         disabled={currentPage === totalPages}
       >
         NEXT
@@ -141,7 +141,7 @@ const CharacterList = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full px-[24px] py-[12px] ">
+    <div className="flex flex-col w-full h-full px-[12px] lg:px-[24px] py-[12px] ">
       <div className="flex flex-row h-auto items-center justify-between ">
         <p
           className="font-semibold text-gray-500 text-xs"
@@ -152,7 +152,7 @@ const CharacterList = () => {
           {totalResults} RESULTS
         </p>
       </div>
-      <div className="grid grid-cols-5 gap-4 gap-x-4 py-[12px]">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 md:gap-x-4 py-[12px]">
         {characters?.map((character: ICharacterData) => (
           <Link
             to={`/characters/${character.id}`}
