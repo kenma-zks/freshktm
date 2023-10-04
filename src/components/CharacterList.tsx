@@ -10,14 +10,17 @@ import { getCharacters } from "@/api/api";
 import Loading from "./ui/Loading";
 
 const CharacterList = () => {
+  // Define items per page and initialize current page state
   const itemsPerPage = 20;
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Get search query from Redux state
   const searchQuery = useAppSelector((state) => state.search);
 
   const dispatch = useAppDispatch();
 
+  // Use react-query to fetch characters data
   const { data, error, isLoading } = useQuery(
     ["characters", currentPage, searchQuery || ""],
     () => getCharacters(currentPage, itemsPerPage, searchQuery || ""),
@@ -34,6 +37,7 @@ const CharacterList = () => {
     return <div>Something went wrong</div>;
   }
 
+  // Extract characters, total pages, and total results from the fetched data
   const characters = data?.data?.results as ICharacterData[];
   const totalPages = Math.ceil(data?.data?.total / itemsPerPage) || 0;
   const totalResults = data?.data?.total || 0;
@@ -52,6 +56,7 @@ const CharacterList = () => {
     }
   };
 
+  // Function to render pagination buttons
   const renderPagination = () => {
     const pageNumbersToShow = 5;
     const pages = Array.from({ length: totalPages }).map(
@@ -152,7 +157,7 @@ const CharacterList = () => {
           {totalResults} RESULTS
         </p>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 md:gap-x-4 py-[12px]">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4 md:gap-x-4 py-[12px]">
         {characters?.map((character: ICharacterData) => (
           <Link
             to={`/characters/${character.id}`}
@@ -166,6 +171,7 @@ const CharacterList = () => {
         ))}
       </div>
       <div className="flex justify-center items-center">
+        {/* Render previous and next buttons */}
         {renderPreviousButton()}
         {renderPagination()}
         {renderNextButton()}

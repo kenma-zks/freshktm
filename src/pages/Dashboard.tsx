@@ -7,7 +7,9 @@ import { useDispatch } from "react-redux";
 const Dashboard = () => {
   const dispatch = useDispatch();
 
+  // Callback function to handle search term changes
   const handleSearch = (searchTerm: string) => {
+    // Dispatch an action to update the search query in Redux state
     dispatch(setSearchQuery(searchTerm));
   };
   return (
@@ -28,6 +30,7 @@ const Dashboard = () => {
           </div>
         </div>
         <Searchbar onSubmit={handleSearch} />
+        {/* CharacterList component displaying Marvel characters */}
         <CharacterList />
       </div>
     </div>

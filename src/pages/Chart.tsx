@@ -42,6 +42,7 @@ const Chart = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCharacters, setSelectedCharacters] = useState<string[]>([]);
 
+  // Use react-query to fetch characters data
   const { data, error, isLoading } = useQuery(
     ["characters", currentPage],
     () => getCharacters(currentPage, itemsPerPage, ""),
@@ -50,6 +51,7 @@ const Chart = () => {
     }
   );
 
+  // Extract characters and total pages from the fetched data
   const characters = data?.data?.results as ICharacterData[];
   const totalPages = Math.ceil(data?.data?.total / itemsPerPage) || 0;
 
@@ -59,6 +61,7 @@ const Chart = () => {
     }
   };
 
+  // Function to render pagination buttons
   const renderPagination = () => {
     const pageNumbersToShow = 3;
     const pages = Array.from({ length: totalPages }).map(
@@ -167,6 +170,7 @@ const Chart = () => {
     });
   };
 
+  // Chart options for the Bar chart
   const options = {
     responsive: true,
 
@@ -185,6 +189,7 @@ const Chart = () => {
 
   const labels = characters?.map((character) => character.name);
 
+  // Prepare data for the Bar chart based on selected characters
   const filteredChartData = {
     labels: labels?.filter((label) => selectedCharacters.includes(label)),
     datasets: [
@@ -219,6 +224,7 @@ const Chart = () => {
               <DropdownMenuLabel>Character Lists</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="flex flex-col text-xs font-semibold">
+                {/* Render checkboxes for character selection */}
                 {labels?.map((label) => (
                   <label key={label} className="mb-2 ">
                     <input

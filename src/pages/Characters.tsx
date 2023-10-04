@@ -8,17 +8,21 @@ import Loading from "@/components/ui/Loading";
 import { useParams } from "react-router-dom";
 
 const Characters = () => {
+  // Get the character ID from the route parameters
   const { characterId } = useParams<{ characterId: string }>();
 
+  // Retrieve selected character from Redux state
   const selectedCharacter = useSelector(
     (state: RootState) => state.characters.selectedCharacter
   );
 
+  // Define API URIs for character, comics, and series
   const characterURI = `https://gateway.marvel.com/v1/public/characters/${characterId}`;
 
   const comicURI = `https://gateway.marvel.com/v1/public/characters/${characterId}/comics`;
   const seriesURI = `https://gateway.marvel.com/v1/public/characters/${characterId}/series`;
 
+  // Use react-query to fetch character, comics, and series data
   const {
     data: characterData,
     error: characterError,

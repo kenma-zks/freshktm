@@ -8,10 +8,14 @@ const Searchbar = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Function to handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+
+    // Call the onSubmit callback with the current search term
     onSubmit(searchTerm);
 
+    // If the input is empty, call onSubmit with an empty string
     if (e.target.value === "") {
       onSubmit("");
     }
