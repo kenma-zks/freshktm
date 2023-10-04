@@ -4,12 +4,24 @@ const instance = axios.create({
   baseURL: "https://gateway.marvel.com",
 });
 
-export const getCharacters = async (page: number, itemsPerPage: number) => {
+export const getCharacters = async (
+  page: number,
+  itemsPerPage: number,
+  query: string
+) => {
+  const url = `/v1/public/characters`;
   const offset = (page - 1) * itemsPerPage;
 
-  const response = await instance.get(
-    `/v1/public/characters?apikey=762b368e819bdc2839a3c34108d6375f&hash=4e5d5653785a55a37e97032fa1b98745&ts=1696329009&limit=${itemsPerPage}&offset=${offset}`
-  );
+  const response = await instance.get(url, {
+    params: {
+      apikey: "762b368e819bdc2839a3c34108d6375f",
+      hash: "4e5d5653785a55a37e97032fa1b98745",
+      ts: 1696329009,
+      offset,
+      limit: itemsPerPage,
+      ...(query && { nameStartsWith: query }),
+    },
+  });
 
   return response.data;
 };

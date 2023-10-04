@@ -19,8 +19,8 @@ const CharacterList = () => {
   const dispatch = useAppDispatch();
 
   const { data, error, isLoading } = useQuery(
-    ["characters", currentPage],
-    () => getCharacters(currentPage, itemsPerPage),
+    ["characters", currentPage, searchQuery || ""],
+    () => getCharacters(currentPage, itemsPerPage, searchQuery || ""),
     {
       enabled: currentPage > 0,
     }
@@ -38,11 +38,7 @@ const CharacterList = () => {
   const totalPages = Math.ceil(data?.data?.total / itemsPerPage) || 0;
   const totalResults = data?.data?.total || 0;
 
-  const filteredCharacters = characters?.filter((character) =>
-    character.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  console.log(filteredCharacters);
+  console.log(searchQuery);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -151,7 +147,7 @@ const CharacterList = () => {
         </p>
       </div>
       <div className="grid grid-cols-5 gap-4 gap-x-4 py-[12px]">
-        {filteredCharacters?.map((character: ICharacterData) => (
+        {characters?.map((character: ICharacterData) => (
           <Link
             to={`/characters/${character.id}`}
             key={character.id}

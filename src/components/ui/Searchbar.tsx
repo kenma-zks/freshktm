@@ -11,6 +11,10 @@ const Searchbar = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     onSubmit(searchTerm);
+
+    if (e.target.value === "") {
+      onSubmit("");
+    }
   };
 
   return (
