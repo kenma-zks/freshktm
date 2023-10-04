@@ -38,7 +38,13 @@ const CharacterList = () => {
   const totalPages = Math.ceil(data?.data?.total / itemsPerPage) || 0;
   const totalResults = data?.data?.total || 0;
 
-  console.log(searchQuery);
+  if (characters.length === 0) {
+    return (
+      <div className="flex w-full h-96 items-center justify-center">
+        Sorry, no results found 😔
+      </div>
+    );
+  }
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {

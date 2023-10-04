@@ -2,7 +2,7 @@ const Loading = () => {
   return (
     <div
       role="status"
-      className="flex items-center justify-center w-full h-full"
+      className="flex flex-grow items-center justify-center w-full h-96"
     >
       <svg
         aria-hidden="true"

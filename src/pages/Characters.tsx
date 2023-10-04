@@ -3,12 +3,28 @@ import { useSelector } from "react-redux";
 import { IComicData, ISeriesData } from "@/types/Types";
 import Header from "@/components/Header";
 import { useQuery } from "react-query";
-import { getComics, getSeries } from "@/api/api";
+import { getCharacter, getComics, getSeries } from "@/api/api";
 import Loading from "@/components/ui/Loading";
+import { useParams } from "react-router-dom";
 
 const Characters = () => {
+  const { characterId } = useParams<{ characterId: string }>();
+
   const selectedCharacter = useSelector(
     (state: RootState) => state.characters.selectedCharacter
+  );
+
+  const characterURI = `https://gateway.marvel.com/v1/public/characters/${characterId}`;
+
+  const comicURI = `https://gateway.marvel.com/v1/public/characters/${characterId}/comics`;
+  const seriesURI = `https://gateway.marvel.com/v1/public/characters/${characterId}/series`;
+
+  const {
+    data: characterData,
+    error: characterError,
+    isLoading: characterLoading,
+  } = useQuery(["characterData", selectedCharacter?.id], () =>
+    getCharacter(characterURI)
   );
 
   const {
@@ -16,7 +32,7 @@ const Characters = () => {
     error: comicError,
     isLoading: comicLoading,
   } = useQuery(["comicData", selectedCharacter?.id], () =>
-    getComics(selectedCharacter?.comics?.collectionURI || "")
+    getComics(comicURI || "")
   );
 
   const {
@@ -24,14 +40,14 @@ const Characters = () => {
     error: seriesError,
     isLoading: seriesLoading,
   } = useQuery(["seriesData", selectedCharacter?.id], () =>
-    getSeries(selectedCharacter?.series?.collectionURI || "")
+    getSeries(seriesURI || "")
   );
 
-  if (comicLoading || seriesLoading) {
+  if (characterLoading || comicLoading || seriesLoading) {
     return <Loading />;
   }
 
-  if (comicError || seriesError) {
+  if (characterError || comicError || seriesError) {
     return <div>Something went wrong</div>;
   }
 
@@ -41,12 +57,12 @@ const Characters = () => {
       <div className="flex flex-row items-center justify-start w-full h-2/3 border border-black px-60 bg-[#151515]">
         <div className="flex flex-col items-center justify-center  h-full border border-black gap-4">
           <img
-            src={`${selectedCharacter?.thumbnail.path}.${selectedCharacter?.thumbnail.extension}`}
-            alt={selectedCharacter?.name}
+            src={`${characterData?.thumbnail.path}.${characterData?.thumbnail.extension}`}
+            alt={characterData?.name}
             className="w-full h-full object-cover "
           />
           <p className="text-xl text-gray-200 font-bold pb-2">
-            {selectedCharacter?.name}
+            {characterData?.name}
           </p>
         </div>
         <div className="flex flex-col items-start justify-center w-full h-full border border-black px-24 py-12 gap-4">

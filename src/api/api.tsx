@@ -26,6 +26,18 @@ export const getCharacters = async (
   return response.data;
 };
 
+export const getCharacter = async (collectionURI: string) => {
+  const response = await instance.get(collectionURI, {
+    params: {
+      apikey: "762b368e819bdc2839a3c34108d6375f",
+      hash: "4e5d5653785a55a37e97032fa1b98745",
+      ts: 1696329009,
+    },
+  });
+
+  return response.data.data.results[0];
+};
+
 export const getComics = async (collectionURI: string) => {
   const response = await instance.get(collectionURI, {
     params: {
